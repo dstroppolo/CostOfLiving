@@ -53,6 +53,9 @@ Temporary Items
 # testing
 /coverage
 
+#api keys
+/src/API_Keys.js
+
 # production
 /build
 
