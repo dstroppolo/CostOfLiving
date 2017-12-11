@@ -15,7 +15,6 @@ class App extends Component {
         </header>
         <div className = "cityPickers">
           <CityPicker />
-          <CityPicker />
         </div>
       </div>
     );

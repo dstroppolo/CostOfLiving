@@ -2,30 +2,38 @@ import React, { Component } from 'react';
 import { Search, Header } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 
-
+const url =  'https://api.teleport.org/api/';
 
 export default class CityPicker extends Component {
+
 
     constructor(props) {
         super(props)
         this.state = {
           city: '',
-          geohash: '',
+          link: '',
           suggestions: [{title: '', link: '', key: 0}],
-          userInput: ''
+          userInput: '',
+          urbanAreaLink: '',
+          urbanAreaDetails: {},
       }
+
+
+
     }
 
+    
 
-    handleCitySubmit = () => {
-
+    /* As the user is entering their search, this function will get called.
+       This is where we use the API query ?search to get suggestions
+       and the geohash for the location */
+    handleCitySearch = () => {
 
       if(this.state.userInput.length < 2){
-        this.setState({suggestions:[]})
-        console.log(this.state.suggestions);
+        this.setState({suggestions:[{title: '', link: '', key: 0}]})
       } else {
 
-      fetch('https://api.teleport.org/api/cities/?search=' + this.state.userInput,{method: 'GET', mode: 'cors'})
+      fetch(url + 'cities/?search=' + this.state.userInput,{method: 'GET', mode: 'cors'})
       .then((response)=>{return response.json()})
         .then((res)=>{ 
           
@@ -48,7 +56,7 @@ export default class CityPicker extends Component {
 
       this.setState({userInput: event.target.value});
 
-      this.handleCitySubmit();
+      this.handleCitySearch();
 
     }
 
@@ -67,6 +75,30 @@ export default class CityPicker extends Component {
 
     }
 
+    handleCityChoice = (event, data) => {
+      this.setState({city: data.result.title, link: data.result.link});
+
+      fetch(data.result.link, {method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
+            .then((res) => {
+              this.setState({urbanAreaLink: res._links['city:urban_area'].href});
+            })
+            .then(this.loadUrbanData);
+
+    }
+
+    loadUrbanData = () => {
+
+      fetch(this.state.urbanAreaLink,{method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
+        .then((res)=>{
+            fetch(res._links['ua:details'].href,{method:'GET', mode:'cors'})
+            .then((response)=>{return response.json()})
+            .then((res)=>{this.setState({urbanAreaDetails: res})})
+          
+        }
+      );
+    }
+
+    check=()=>{console.log(this.state.urbanAreaDetails)}
 
     
     render(){
@@ -81,8 +113,12 @@ export default class CityPicker extends Component {
         onSearchChange = {this.handleUserInput}
         results = {this.state.suggestions}
         size = 'large'
+        showNoResults = {false}
+        onResultSelect = {this.handleCityChoice}
         
-          />
+        />
+
+          <p>{this.state.urbanAreaLink}</p>
       </div>
 
 

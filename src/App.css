@@ -36,12 +36,15 @@
 .cityPickers{
   display: flex;
   width: 100%;
+  padding-top: 10%;
+
 
 }
 
 .cityPicker{
   display: flex;
   width: 50%;
-  justify-content: space-around;
+  justify-content: center;
+  
 }
 
