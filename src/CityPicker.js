@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Search, Header } from 'semantic-ui-react';
+import CityData from './CityData';
 import 'semantic-ui-css/semantic.min.css';
 
 const url =  'https://api.teleport.org/api/';
@@ -15,7 +16,7 @@ export default class CityPicker extends Component {
           suggestions: [{title: '', link: '', key: 0}],
           userInput: '',
           urbanAreaLink: '',
-          urbanAreaDetails: {},
+          urbanAreaDetails: {categories: []},
       }
 
 
@@ -98,10 +99,40 @@ export default class CityPicker extends Component {
       );
     }
 
+    renderCityData = () => {
+
+      if(this.state.urbanAreaDetails.categories.length > 0){
+
+        return(
+
+          this.state.urbanAreaDetails.categories.map((category)=>{
+
+            <CityData label = {category.label} data = {category.data} key = {category.id}/>
+
+          })
+        )
+      }
+    }
+
     check=()=>{console.log(this.state.urbanAreaDetails)}
 
     
     render(){
+      
+      var data = [];
+
+      
+      if(this.state.urbanAreaDetails.categories.length > 0){
+
+
+         this.state.urbanAreaDetails.categories.map((category)=>{
+
+            data.push(<CityData label = {category.label} data = {category.data} key = {category.id} />);
+
+          })
+        
+      }
+
 
       return(
 
@@ -118,7 +149,9 @@ export default class CityPicker extends Component {
         
         />
 
-          <p>{this.state.urbanAreaLink}</p>
+        {data}
+        
+
       </div>
 
 
