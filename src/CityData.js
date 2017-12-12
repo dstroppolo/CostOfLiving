@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button, Checkbox, Icon, Table } from 'semantic-ui-react'
 
 export default class CityData extends Component {
 
@@ -16,11 +17,12 @@ export default class CityData extends Component {
 
         return(
 
-            <div>
+            
 
-                <h4>{this.props.label}</h4>
-                
-                <p>
+            <Table.Cell>{this.props.text}</Table.Cell>
+
+            /*
+                <strong>{this.props.label}</strong>
                 {this.props.data[0].label}: 
                 {this.props.data[0].int_value || 
                 this.props.data[0].float_value || 
@@ -28,10 +30,10 @@ export default class CityData extends Component {
                 this.props.data[0].currency_dollar_value ||
                 this.props.data[0].percent_value
                 }
-                
-                </p>
+              */  
+            
 
-            </div>
+            
 
 
         )

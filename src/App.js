@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import googlePlacesKey from './API_Keys';
 import CityPicker from './CityPicker';
-
+import DataTable from './DataTable';
 
 class App extends Component {
   render() {
@@ -15,7 +15,9 @@ class App extends Component {
         </header>
         <div className = "cityPickers">
           <CityPicker />
+          <CityPicker />
         </div>
+        <DataTable />
       </div>
     );
   }
