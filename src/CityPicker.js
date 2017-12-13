@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Search, Header } from 'semantic-ui-react';
+import { Search } from 'semantic-ui-react';
 import CityData from './CityData';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -94,44 +94,21 @@ export default class CityPicker extends Component {
             fetch(res._links['ua:details'].href,{method:'GET', mode:'cors'})
             .then((response)=>{return response.json()})
             .then((res)=>{this.setState({urbanAreaDetails: res})})
-          
+            .then(()=>{this.props.setSelectedCities({
+              categories: this.state.urbanAreaDetails.categories,
+              title: this.state.city,
+            })
+          });
         }
       );
     }
 
-    renderCityData = () => {
-
-      if(this.state.urbanAreaDetails.categories.length > 0){
-
-        return(
-
-          this.state.urbanAreaDetails.categories.map((category)=>{
-
-            <CityData label = {category.label} data = {category.data} key = {category.id}/>
-
-          })
-        )
-      }
-    }
 
     check=()=>{console.log(this.state.urbanAreaDetails)}
 
     
     render(){
-      
-      var data = [];
 
-      
-      if(this.state.urbanAreaDetails.categories.length > 0){
-
-
-         this.state.urbanAreaDetails.categories.map((category)=>{
-
-            data.push(<CityData label = {category.label} data = {category.data} key = {category.id} />);
-
-          })
-        
-      }
 
 
       return(
@@ -149,7 +126,6 @@ export default class CityPicker extends Component {
         
         />
 
-        {data}
         
 
       </div>

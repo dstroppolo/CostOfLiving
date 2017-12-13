@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Checkbox, Icon, Table } from 'semantic-ui-react';
+import { Table } from 'semantic-ui-react';
 import CityData from './CityData';
 
 
@@ -14,37 +14,46 @@ export default class CityPicker extends Component {
         }
     }
 
+    renderBodyRows = () => {
+
+     
+        let rows = this.props.cityData.map((c, index) => {
+            return(
+                <Table.Row key = {index}>
+                    ..
+                </Table.Row>
+            )
+        })
+
+        console.log(rows);
+
+        return rows;
+        
+
+    }
+
 
 
     render(){
 
         return(
 
-            <Table celled definition>
+            <Table striped stackable celled definition basic='very' textAlign='center'>
+
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell />
+                        <Table.HeaderCell width = {1} />
                         <Table.HeaderCell width ={3}>Category</Table.HeaderCell>
-                        <Table.HeaderCell width ={6}>City 1</Table.HeaderCell>
-                        <Table.HeaderCell width ={6}>City 2</Table.HeaderCell>
+                        <Table.HeaderCell width ={6}>{this.props.cityNames[0] || 'Select a City'}</Table.HeaderCell>
+                        <Table.HeaderCell width ={6}>{this.props.cityNames[1] || 'Select a City'}</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
 
                 <Table.Body>
-      <Table.Row>
-            <CityData text = '..' />
-            <CityData text = '..' />
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>Jamie</Table.Cell>
-        <Table.Cell>Approved</Table.Cell>
-      </Table.Row>
-      <Table.Row>
-        <Table.Cell>Jill</Table.Cell>
-        <Table.Cell>Denied</Table.Cell>
-      </Table.Row>
-    </Table.Body>
 
+                    {this.renderBodyRows()}
+
+                </Table.Body>
 
             </Table>
         )
