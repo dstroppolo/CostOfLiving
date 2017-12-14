@@ -10,21 +10,30 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      cities: [],
-      data: []
+      cities: {}
 
     }
   }
 
-  setSelectedCities = (cityData) =>{
+  setSelectedCities = (cityData, cityNumber) =>{
     this.setState(
       {
-        cities: this.state.cities.concat(cityData.title), 
-        data: this.state.data.concat(cityData.categories)
-      });
+        cities: {...this.state.cities, [cityNumber]: cityData}
+      }
+    );
   }
 
+  addCityPickers = () => {
 
+    let numberOfCities = [1,2];
+
+    let cityPickers = numberOfCities.map((key) => {
+        return <CityPicker setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+      }
+   )
+   return cityPickers;
+
+  }
 
   render() {
     return (
@@ -37,12 +46,13 @@ class App extends Component {
         <div className = 'mainBody'>
 
           <div className = "cityPickers">
-            <CityPicker setSelectedCities = {this.setSelectedCities} />
-            <CityPicker setSelectedCities = {this.setSelectedCities}/>
+
+            {this.addCityPickers()}
           </div>
 
           <div className = 'dataTable'>
-            {this.state.cities.length > 0 && <DataTable cityNames = {this.state.cities} cityData = {this.state.data} />}
+            <DataTable cities = {this.state.cities} />
+
           </div>
 
         </div>

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Search } from 'semantic-ui-react';
-import CityData from './CityData';
 import 'semantic-ui-css/semantic.min.css';
 
 const url =  'https://api.teleport.org/api/';
@@ -97,7 +96,7 @@ export default class CityPicker extends Component {
             .then(()=>{this.props.setSelectedCities({
               categories: this.state.urbanAreaDetails.categories,
               title: this.state.city,
-            })
+            }, this.props.id)
           });
         }
       );
@@ -126,7 +125,7 @@ export default class CityPicker extends Component {
         
         />
 
-        
+        {this.props.id}
 
       </div>
 
