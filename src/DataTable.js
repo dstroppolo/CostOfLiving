@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { Table } from 'semantic-ui-react';
 import CityData from './CityData';
 
+const costOfLiving = 3;
+
+
 
 export default class CityPicker extends Component {
 
@@ -17,27 +20,50 @@ export default class CityPicker extends Component {
     }
 
     renderHeaderRows = () => {
-        let rows = Object.keys(this.props.cities).map((c, index) => {
+        let rows = Object.keys(this.props.cities).map((c) => {
 
             return (
-                <Table.HeaderCell width ={3} key = {index}>{this.props.cities[c].title}</Table.HeaderCell>
+                <Table.HeaderCell width ={3} key = {c}>{this.props.cities[c].title}</Table.HeaderCell>
             )
         })
         return rows
     }
 
     renderBodyRows = () => {
+        
+        let data = this.props.cities[0].categories[costOfLiving].data;
+        console.log(data);
+        
+        let rows = data.map((c, index) => {
 
-
-        let rows = Object.keys(this.props.cities).map((c, index) => {
 
             return(
-                <Table.Row>
+
+                <Table.Row key = {index}>
+                
                     <Table.Cell>
                         ...
                     </Table.Cell>
 
-                </Table.Row>
+                    <Table.Cell>
+                        {c.label}
+                    </Table.Cell>
+
+                        {
+                            Object.keys(this.props.cities).map(cityKey =>{
+
+                                let curType = this.props.cities[cityKey].categories[costOfLiving].data[index].type;
+                                let curValue = this.props.cities[cityKey].categories[costOfLiving].data[index][curType+'_value'];
+
+                                return(
+
+                                    <CityData text = {curValue} key = {cityKey+'_'+index} />
+                            
+                                )
+    
+                            })
+                        }
+                </ Table.Row>
             )
         })
 
@@ -45,32 +71,6 @@ export default class CityPicker extends Component {
 
 
 }
-
-
-formatIncomingProps = (nextProps) =>{
-    //when the props come in, its as a big ol object. here we want to seperate it into the state to make it easier to use
-    let data = nextProps.cities;
-
-    this.setState({cityCount: 0, cityNames: [], cityData: []});
-
-    for(let city in data){
-
-        console.log([...this.state.cityNames, data[city].title]);
-        this.setState(
-            {
-                cityCount: ++this.state.cityCount,
-                cityNames: [...this.state.cityNames, data[city].title],
-                cityData: [...this.state.cityData, data[city].categories]
-
-            }
-        )
-    }
-
-    console.log(this.state)
-
-}
-
-
 
     render(){
 
@@ -88,7 +88,8 @@ formatIncomingProps = (nextProps) =>{
 
                 <Table.Body>
 
-                    {this.renderBodyRows()}
+                {this.renderBodyRows()}
+
 
                 </Table.Body>
 

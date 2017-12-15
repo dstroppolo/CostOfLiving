@@ -25,7 +25,7 @@ class App extends Component {
 
   addCityPickers = () => {
 
-    let numberOfCities = [1,2];
+    let numberOfCities = [0,1,2];
 
     let cityPickers = numberOfCities.map((key) => {
         return <CityPicker setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
@@ -51,7 +51,7 @@ class App extends Component {
           </div>
 
           <div className = 'dataTable'>
-            <DataTable cities = {this.state.cities} />
+            {this.state.cities.hasOwnProperty('0') && <DataTable cities = {this.state.cities} /> }
 
           </div>
 
