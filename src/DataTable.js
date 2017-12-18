@@ -32,7 +32,7 @@ export default class CityPicker extends Component {
     renderBodyRows = () => {
         
         let data = this.props.cities[0].categories[costOfLiving].data;
-        console.log(data);
+        console.log(this.props.cities);
         
         let rows = data.map((c, index) => {
 

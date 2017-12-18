@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CityPicker from './CityPicker';
+import CityPickerNew from './CityPickerNew';
 import DataTable from './DataTable';
 
 
@@ -28,7 +29,7 @@ class App extends Component {
     let numberOfCities = [0,1,2];
 
     let cityPickers = numberOfCities.map((key) => {
-        return <CityPicker setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+        return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
       }
    )
    return cityPickers;
