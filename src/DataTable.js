@@ -13,10 +13,24 @@ export default class CityPicker extends Component {
         this.state = {
             cityCount: 0,
             cityNames: [],
-            cityData: []
+            cityData: null
 
 
         }
+    }
+
+    componentDidMount = () => {
+
+
+
+            fetch(this.props.links[0])
+                .then(res => {return res.json()})
+                    .then(res => {this.setState(...this.state.cityData, {res})})
+
+
+        
+
+
     }
 
     renderHeaderRows = () => {
@@ -74,6 +88,11 @@ export default class CityPicker extends Component {
 
     render(){
 
+        if(!this.state.cityData) 
+            return <p>Loading...</p>
+        else {
+
+        
         return(
 
             <Table striped stackable celled definition basic='very' textAlign='center'>
@@ -95,6 +114,7 @@ export default class CityPicker extends Component {
 
             </Table>
         )
+    }
 
     }
 

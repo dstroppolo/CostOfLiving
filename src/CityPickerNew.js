@@ -22,6 +22,8 @@ export default class CityPickerNew extends Component {
     
     }
 
+
+
     //as the user enters their search, send a request for each letter and update
     //the suggestions in the state
     handleSearchInput = (event) => {
@@ -75,8 +77,12 @@ export default class CityPickerNew extends Component {
         .then((res) => {
           this.setState({urbanAreaLink: res._links['city:urban_area'].href});
         })
-        .then(() => this.loadUrbanData('details'))
+        .then(() => this.loadUrbanDetails())
         .then(() => this.loadImage())
+        .then(() => this.setDataToState())
+
+
+        
     }
 
     //here we want to search the urban area data which is what were
@@ -92,14 +98,20 @@ export default class CityPickerNew extends Component {
                     fetch(res._links['ua:' + resource].href, {method:'GET', mode: 'cors'})
                         .then((response) => response.json())
                             .then((res) => this.setState({[resource]: res}))
-                            .then(this.check)
                 })
+    }
+
+    loadUrbanDetails = () => {
+        this.loadUrbanData('details');
     }
 
     loadImage = () => {
         this.loadUrbanData('images');
     }
-
+    
+    setDataToState = () => {
+        this.props.setSelectedCities(this.state.urbanAreaLink, this.props.id)
+    }
 
 
     check=()=>{console.log(this.state)}
@@ -122,8 +134,6 @@ export default class CityPickerNew extends Component {
                 onResultSelect = {this.handleCityChoice}
                 
                 />
-        
-                {this.props.id}
 
                 {this.state.images && <Image src = {this.state.images.photos[0].image.mobile} size='medium' rounded/>}
         

@@ -11,17 +11,17 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      cities: {}
+      links: {},
 
     }
   }
 
-  setSelectedCities = (cityData, cityNumber) =>{
-    this.setState(
-      {
-        cities: {...this.state.cities, [cityNumber]: cityData}
+  setSelectedCities = (link, cityNumber) =>{
+    this.setState({
+      
+        links: {...this.state.links, [cityNumber]: link}
       }
-    );
+    )
   }
 
   addCityPickers = () => {
@@ -52,8 +52,7 @@ class App extends Component {
           </div>
 
           <div className = 'dataTable'>
-            {this.state.cities.hasOwnProperty('0') && <DataTable cities = {this.state.cities} /> }
-
+            {Object.keys(this.state.links).length == 0 ? "hello" : <DataTable links = {this.state.links} />}
           </div>
 
         </div>
