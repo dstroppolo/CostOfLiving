@@ -53,7 +53,7 @@ export default class CityPicker extends Component {
 
     handleUserInput = (event) => {
 
-
+      console.log(event);
       this.setState({userInput: event.target.value});
 
       this.handleCitySearch();
@@ -76,6 +76,8 @@ export default class CityPicker extends Component {
     }
 
     handleCityChoice = (event, data) => {
+      alert(event);
+      alert(JSON.stringify(data.result.link));
       this.setState({city: data.result.title, link: data.result.link});
 
       fetch(data.result.link, {method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
@@ -86,11 +88,13 @@ export default class CityPicker extends Component {
 
     }
 
-    loadUrbanData = () => {
+    loadUrbanData = (resource) => {
+
+      alert(this.state.urbanAreaLink);
 
       fetch(this.state.urbanAreaLink,{method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
         .then((res)=>{
-            fetch(res._links['ua:details'].href,{method:'GET', mode:'cors'})
+            fetch(res._links['ua:' + resource].href,{method:'GET', mode:'cors'})
             .then((response)=>{return response.json()})
             .then((res)=>{this.setState({urbanAreaDetails: res})})
             .then(()=>{this.props.setSelectedCities({
@@ -103,7 +107,7 @@ export default class CityPicker extends Component {
     }
 
 
-    check=()=>{console.log(this.state.urbanAreaDetails)}
+    
 
     
     render(){

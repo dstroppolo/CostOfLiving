@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CityPicker from './CityPicker';
-import DataTable from './DataTable';
+import CityPickerNew from './CityPickerNew';
+import InfoGetter from './InfoGetter';
 
 
 class App extends Component {
@@ -10,17 +11,17 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      cities: {}
+      links: [],
+
 
     }
   }
 
-  setSelectedCities = (cityData, cityNumber) =>{
-    this.setState(
-      {
-        cities: {...this.state.cities, [cityNumber]: cityData}
+  setSelectedCities = (link, cityNumber) =>{
+    this.setState({
+        links: [...this.state.links, link]
       }
-    );
+    )
   }
 
   addCityPickers = () => {
@@ -28,7 +29,7 @@ class App extends Component {
     let numberOfCities = [0,1,2];
 
     let cityPickers = numberOfCities.map((key) => {
-        return <CityPicker setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+        return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
       }
    )
    return cityPickers;
@@ -51,7 +52,7 @@ class App extends Component {
           </div>
 
           <div className = 'dataTable'>
-            {this.state.cities.hasOwnProperty('0') && <DataTable cities = {this.state.cities} /> }
+            {Object.keys(this.state.links).length == 0 ? "Please select some cities." : <InfoGetter links = {this.state.links} />}
 
           </div>
 
