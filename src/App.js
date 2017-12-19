@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import CityPicker from './CityPicker';
 import CityPickerNew from './CityPickerNew';
-import DataTable from './DataTable';
+import InfoGetter from './InfoGetter';
 
 
 class App extends Component {
@@ -11,15 +11,15 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      links: {},
+      links: [],
+
 
     }
   }
 
   setSelectedCities = (link, cityNumber) =>{
     this.setState({
-      
-        links: {...this.state.links, [cityNumber]: link}
+        links: [...this.state.links, link]
       }
     )
   }
@@ -52,7 +52,8 @@ class App extends Component {
           </div>
 
           <div className = 'dataTable'>
-            {Object.keys(this.state.links).length == 0 ? "hello" : <DataTable links = {this.state.links} />}
+            {Object.keys(this.state.links).length == 0 ? "Please select some cities." : <InfoGetter links = {this.state.links} />}
+
           </div>
 
         </div>

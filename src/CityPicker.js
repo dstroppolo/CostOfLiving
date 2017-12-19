@@ -107,7 +107,7 @@ export default class CityPicker extends Component {
     }
 
 
-    check=()=>{console.log(this.state.urbanAreaDetails)}
+    
 
     
     render(){
