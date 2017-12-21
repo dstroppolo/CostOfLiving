@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Table } from 'semantic-ui-react';
+import { Table, Loader } from 'semantic-ui-react';
 import CityData from './CityData';
+import City from './CityInfo';
 
 const costOfLiving = 3;
 
@@ -39,13 +40,13 @@ export default class DataTable extends Component {
     render(){
 
         if(!this.state.citySalariesLinks) 
-            return <p>Loading...</p>
+            return <Loader />
         else {
 
         
         return(
 
-            <p>{JSON.stringify(this.state)}</p>
+            <p><City cityObject = {this.state.cityNames} /></p>
           
         )
     }
