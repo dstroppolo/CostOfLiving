@@ -114,8 +114,6 @@ export default class CityPickerNew extends Component {
     }
 
 
-    check=()=>{console.log(this.state)}
-
     render(){
         
         
