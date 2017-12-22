@@ -31,8 +31,13 @@ export default class DataTable extends Component {
         if(p.links.length > 1){
             fetch(p.links[p.links.length-1])
             .then(res => {return res.json()})
-                .then(res => {this.setState({cityNames: [...this.state.cityNames, res.name], citySalariesLinks: [...this.state.citySalariesLinks, res._links['ua:salaries'].href]})}
-            )
+                .then(res => {this.setState({cityNames: [...this.state.cityNames, res.name], citySalariesLinks: [...this.state.citySalariesLinks, res._links['ua:salaries'].href]})})
+                    .then( () => {
+                        if(this.state.citySalariesLinks.length == p.links.length ){
+                            this.props.addSalaryInformation(this.state.citySalariesLinks)
+                        }
+                    })
+        
         }
     }
 
@@ -45,9 +50,8 @@ export default class DataTable extends Component {
 
         
         return(
-
             <p><City cityObject = {this.state.cityNames} /></p>
-          
+       
         )
     }
 

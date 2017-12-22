@@ -72,6 +72,7 @@ export default class CityPickerNew extends Component {
 
     //this is one of the events that could happen. 
     handleCityChoice = (event, data) => {
+        this.setState({city: '', link: ''});
         this.setState({city: data.result.title, link: data.result.link});
         fetch(data.result.link, {method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
         .then((res) => {

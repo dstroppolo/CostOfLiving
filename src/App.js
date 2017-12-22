@@ -15,7 +15,7 @@ class App extends Component {
       links: [],
       numberOfCities: [0,1],
       noMoreCities: false,
-      
+      salaryInfoLinks: []
     }
   }
 
@@ -48,6 +48,15 @@ class App extends Component {
     )
   }
 
+  addSalaryInformation = (salaryInfoLinks) => {
+
+    this.setState({
+      salaryInfoLinks: [...this.state.salaryInfoLinks, salaryInfoLinks]
+    })
+
+
+  }
+
   render() {
     return (
       <div className="App">
@@ -72,8 +81,8 @@ class App extends Component {
           </div>
 
           <div className = 'dataTable'>
-            {Object.keys(this.state.links).length == 0 ? "Please select some cities." : <InfoGetter links = {this.state.links} />}
-            
+            {Object.keys(this.state.links).length == 0 ? "Please select some cities." : <InfoGetter links = {this.state.links} addSalaryInformation = {this.addSalaryInformation} />}
+            {this.state.salaryInfoLinks}
           </div>
 
         </div>
