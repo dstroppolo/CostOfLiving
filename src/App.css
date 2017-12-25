@@ -34,7 +34,21 @@
 
 }
 
+.salaryInfoWrap{
+  display: flex;
+  width: 100%;
+}
+
 .cityPicker{
+  display: flex;
+  width: 50%;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.jobPicker{
   display: flex;
   width: 50%;
   flex-wrap: wrap;

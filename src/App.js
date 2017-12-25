@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import CityPicker from './CityPicker';
 import CityPickerNew from './CityPickerNew';
-import InfoGetter from './InfoGetter';
+import JobPicker from './JobPicker';
 import { Button } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 
 
 class App extends Component {
@@ -12,40 +12,40 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      links: [],
+      cities: {},
       numberOfCities: [0,1],
-      noMoreCities: false,
-      
+      noMoreCities: false
     }
   }
 
-  setSelectedCities = (link, cityNumber) =>{
-    this.setState({
-        links: [...this.state.links, link]
-      }
+  /** passed as a prop to add the link for the city */
+  setSelectedCities = (city, cityNumber) =>{
+    this.setState({cities: {...this.state.cities, [cityNumber]: city}});
+  }
+
+  /**adds more than the initial 2 city pickers */
+  addCity = () => {
+        this.setState({
+            numberOfCities: [...this.state.numberOfCities, this.state.numberOfCities[this.state.numberOfCities.length-1]+1],
+            noMoreCities: this.state.numberOfCities.length >= 3 ? true : false
+        }
     )
   }
 
-  addCityPickers = () => {
+  /**adds the city picker components (map) */
+  addCityPickers = (jobs) => {
 
     let numberOfCities = this.state.numberOfCities;
-
     let cityPickers = numberOfCities.map((key) => {
-        return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+        if(jobs){
+          return <JobPicker info = {this.state.cities[key]} key = {key} id = {key} />
+        } else {
+          return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+        }
       }
    )
    return cityPickers;
 
-  }
-
-  addCity = () => {
-
-
-    this.setState({
-        numberOfCities: [...this.state.numberOfCities, this.state.numberOfCities[this.state.numberOfCities.length-1]+1],
-        noMoreCities: this.state.numberOfCities.length >= 3 ? true : false
-    }
-    )
   }
 
   render() {
@@ -59,9 +59,10 @@ class App extends Component {
         <div className = 'mainBody'>
 
           <div className = "cityPickers">
-
             {this.addCityPickers()}
           </div>
+
+
           <div className = 'addCityButtonWrap'>
           <Button 
             icon = 'add circle' 
@@ -71,9 +72,9 @@ class App extends Component {
           />
           </div>
 
-          <div className = 'dataTable'>
-            {Object.keys(this.state.links).length == 0 ? "Please select some cities." : <InfoGetter links = {this.state.links} />}
-            
+          <div className = 'salaryInfoWrap'>
+            {this.addCityPickers(true)}
+
           </div>
 
         </div>

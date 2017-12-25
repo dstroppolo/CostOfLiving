@@ -1,27 +1,42 @@
 import React, { Component } from 'react';
 import { Search, Image } from 'semantic-ui-react';
-import 'semantic-ui-css/semantic.min.css';
 
 const url =  'https://api.teleport.org/api/';
 
 export default class CityPickerNew extends Component {
     
     
-        constructor(props) {
-            super(props)
-            this.state = {
-              city: '',
-              link: '',
-              suggestions: [{title: '', link: '', key: 0}],
-              userInput: '',
-              urbanAreaLink: '',
-              urbanAreaDetails: {categories: []},
-          }
-    
-    
-    
+    constructor(props) {
+        super(props)
+        this.state = {
+            city: '',
+            link: '',
+            suggestions: [{title: '', link: '', key: 0}],
+            userInput: '',
+            urbanAreaLink: '',
+            urbanAreaDetails: {categories: []},
+            updated: false,
+        }
     }
 
+    shouldComponentUpdate = (np, ns) => {
+
+        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images')){
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
+
+    componentDidUpdate = () =>{
+        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images')){
+            this.setState({updated: true});
+            this.props.setSelectedCities(this.state, this.props.id);
+        }
+    }
 
 
     //as the user enters their search, send a request for each letter and update
@@ -70,8 +85,8 @@ export default class CityPickerNew extends Component {
         
     }
 
-    //this is one of the events that could happen. 
-    handleCityChoice = (event, data) => {
+    loadAllData = (event, data) => {
+
         this.setState({city: data.result.title, link: data.result.link});
         fetch(data.result.link, {method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
         .then((res) => {
@@ -79,17 +94,17 @@ export default class CityPickerNew extends Component {
         })
         .then(() => this.loadUrbanDetails())
         .then(() => this.loadImage())
-        .then(() => this.setDataToState())
+        .then(() => this.loadSalary())
+    }
 
-
-        
+    //this is one of the events that could happen. 
+    handleCityChoice = (event, data) => {
+        this.loadAllData(event, data);
     }
 
     //here we want to search the urban area data which is what were
     //actually interested in. 
     loadUrbanData = (resource) => {
-
-        let fetchedData = {};
 
         fetch(this.state.urbanAreaLink, {method: 'GET', mode: 'cors'})
             .then((response) => {return response.json()})
@@ -99,6 +114,7 @@ export default class CityPickerNew extends Component {
                         .then((response) => response.json())
                             .then((res) => this.setState({[resource]: res}))
                 })
+
     }
 
     loadUrbanDetails = () => {
@@ -108,9 +124,13 @@ export default class CityPickerNew extends Component {
     loadImage = () => {
         this.loadUrbanData('images');
     }
+
+    loadSalary = () => {
+        this.loadUrbanData('salaries');
+    }
     
     setDataToState = () => {
-        this.props.setSelectedCities(this.state.urbanAreaLink, this.props.id)
+        this.props.setSelectedCities(this.state, this.props.id)
     }
 
 
