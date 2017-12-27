@@ -21,7 +21,6 @@ export default class JobPicker extends Component {
     // ]
     componentDidUpdate = () => {
 
-
         if(this.props.info && this.state.jobList.length == 0){
             this.formatSalaryInfo();
         }
@@ -53,9 +52,9 @@ export default class JobPicker extends Component {
     render(){
 
         return(
-            <div className = 'jobPicker'>
+            <div className = {this.props.active? 'jobPicker activeCity': 'jobPicker'}>
               <Dropdown upward onChange = {this.handleSelection} selection placeholder = 'Jobs...' options = {this.state.jobList} />
-              <h1>{this.state.salary ? this.formatCurrency(this.state.salary) : 'Select a career'}</h1>
+              <h1>{this.state.salary ? '$' + this.formatCurrency(this.state.salary) : 'Select a career'}</h1>
             
             </div>
         )

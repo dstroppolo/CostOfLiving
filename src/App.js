@@ -38,7 +38,7 @@ class App extends Component {
     let numberOfCities = this.state.numberOfCities;
     let cityPickers = numberOfCities.map((key) => {
         if(jobs){
-          return <JobPicker info = {this.state.cities[key]} key = {key} id = {key} />
+          return <JobPicker active={key===0?true:false} info = {this.state.cities[key]} key = {key} id = {key} />
         } else {
           return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
         }
@@ -57,7 +57,6 @@ class App extends Component {
         </header>
 
         <div className = 'mainBody'>
-
           <div className = "cityPickers">
             {this.addCityPickers()}
           </div>
@@ -75,6 +74,7 @@ class App extends Component {
           <div className = 'salaryInfoWrap'>
             {this.addCityPickers(true)}
 
+            {this.state.cities[]?'hi':'bye'}
           </div>
 
         </div>

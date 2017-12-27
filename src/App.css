@@ -86,3 +86,7 @@
   align-items: center;
 
 }
+
+.activeCity{
+  background: rgb(252, 248, 248);
+}

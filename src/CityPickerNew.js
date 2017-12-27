@@ -21,7 +21,7 @@ export default class CityPickerNew extends Component {
 
     shouldComponentUpdate = (np, ns) => {
 
-        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images')){
+        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images') && this.state.hasOwnProperty('details')){
             return false;
         } else {
             return true;
@@ -32,7 +32,7 @@ export default class CityPickerNew extends Component {
 
 
     componentDidUpdate = () =>{
-        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images')){
+        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images') && this.state.hasOwnProperty('details')){
             this.setState({updated: true});
             this.props.setSelectedCities(this.state, this.props.id);
         }
