@@ -64,3 +64,5 @@ function mean(values, precision=3){
 function compareC2toC1(v1, v2, precision = 3){
     return Number(((v2)/v1).toFixed(precision));
 }
+
+

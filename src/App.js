@@ -73,8 +73,6 @@ class App extends Component {
 
           <div className = 'salaryInfoWrap'>
             {this.addCityPickers(true)}
-
-            {this.state.cities[]?'hi':'bye'}
           </div>
 
         </div>
