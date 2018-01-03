@@ -14,13 +14,23 @@ class App extends Component {
     this.state = {
       cities: {},
       numberOfCities: [0,1],
-      noMoreCities: false
+      noMoreCities: false,
+      COLData: {},
     }
   }
 
   /** passed as a prop to add the link for the city */
   setSelectedCities = (city, cityNumber) =>{
     this.setState({cities: {...this.state.cities, [cityNumber]: city}});
+  }
+
+  /*receives objects id: data and sets the COL ratios*/
+  handleCOLData = (COL) => {
+    if(Object.keys(COL).length > 0){
+      this.setState({
+        COLData: {...this.state.COLData, ...COL}
+      })
+    }
   }
 
   /**adds more than the initial 2 city pickers */
@@ -38,7 +48,7 @@ class App extends Component {
     let numberOfCities = this.state.numberOfCities;
     let cityPickers = numberOfCities.map((key) => {
         if(jobs){
-          return <JobPicker active={key===0?true:false} info = {this.state.cities[key]} key = {key} id = {key} />
+          return <JobPicker handleCOLData = {this.handleCOLData} active={key===0} info = {this.state.cities[key]} key = {key} id = {key} />
         } else {
           return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
         }
