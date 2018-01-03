@@ -5,6 +5,7 @@ import CityPickerNew from './CityPickerNew';
 import JobPicker from './JobPicker';
 import { Button } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
+import  calculateCityRatios  from './calculations';
 
 
 class App extends Component {
@@ -15,7 +16,9 @@ class App extends Component {
       cities: {},
       numberOfCities: [0,1],
       noMoreCities: false,
-      COLData: {},
+      COLDataWithIndex: {},
+      COLRatios: {},
+      mainCitySalary: null,
     }
   }
 
@@ -25,10 +28,17 @@ class App extends Component {
   }
 
   /*receives objects id: data and sets the COL ratios*/
-  handleCOLData = (COL) => {
+  handleCOLData = (COL, id) => {
+
+
     if(Object.keys(COL).length > 0){
       this.setState({
-        COLData: {...this.state.COLData, ...COL}
+        COLDataWithIndex: {...this.state.COLDataWithIndex, ...COL}
+      }, () => {
+          if(this.state.COLDataWithIndex.hasOwnProperty(0) && Object.keys(this.state.COLDataWithIndex).length > 1){
+            var x = calculateCityRatios([this.state.COLDataWithIndex[0], this.state.COLDataWithIndex[id]]);
+            this.setState({COLRatios: {...this.state.COLRatios, [id]: x}});
+          }
       })
     }
   }
@@ -42,13 +52,19 @@ class App extends Component {
     )
   }
 
+
+  setMainCitySalary = (salary, id) => {
+    if(id === 0)
+      this.setState({mainCitySalary: salary});
+  }
+
   /**adds the city picker components (map) */
   addCityPickers = (jobs) => {
 
     let numberOfCities = this.state.numberOfCities;
     let cityPickers = numberOfCities.map((key) => {
         if(jobs){
-          return <JobPicker handleCOLData = {this.handleCOLData} active={key===0} info = {this.state.cities[key]} key = {key} id = {key} />
+          return <JobPicker mainCitySalary = {this.state.mainCitySalary} setMainCitySalary = {this.setMainCitySalary} ratio = {this.state.COLRatios[key]} handleCOLData = {this.handleCOLData} active={key===0} info = {this.state.cities[key]} key = {key} id = {key} />
         } else {
           return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
         }

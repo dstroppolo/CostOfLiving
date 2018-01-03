@@ -44,7 +44,7 @@ export default class JobPicker extends Component {
     }
 
     handleSelection = (event, data) => {
-        this.setState({salary: data.value});
+        this.setState({salary: data.value}, () => {this.props.setMainCitySalary(data.value, this.props.id)});
     }
 
     formatCurrency = (amt) => {
@@ -53,10 +53,8 @@ export default class JobPicker extends Component {
 
     handleCOLData = (COL, id) => {
         if(COL && COL.length > 1){
-            this.setState({cityCOLInfo: {[id]: COL}}, () => this.props.handleCOLData(this.state.cityCOLInfo));
-        }
-
-        
+            this.setState({cityCOLInfo: {[id]: COL}}, () => this.props.handleCOLData(this.state.cityCOLInfo, this.props.id));
+        } 
     }
 
     getCostOfLiving = (city) => {
@@ -96,10 +94,27 @@ export default class JobPicker extends Component {
 
     render(){
 
+        let equivAmount = this.props.mainCitySalary * this.props.ratio;
+        let compareAmount = this.state.salary;
+        let numberColor = 'black';
+
+        if(this.props.id != 0 && this.props.mainCitySalary && this.state.salary){
+            console.log(equivAmount);
+            console.log(compareAmount);
+            numberColor = compareAmount >= equivAmount ? 'green' : 'red';
+        }
+
         return(
             <div className = {this.props.active? 'jobPicker activeCity': 'jobPicker'}>
               <Dropdown upward onChange = {this.handleSelection} selection placeholder = 'Jobs...' options = {this.state.jobList} />
-              <h1>{this.state.salary ? '$' + this.formatCurrency(this.state.salary) : 'Select a career'}</h1>
+              <h1 style = { {color: numberColor} }>{this.state.salary ? '$' + this.formatCurrency(this.state.salary) : 'Select a career'}</h1>
+              <p>{this.props.id === 0 ? 
+                'This city is the baseline.' : 
+                this.props.mainCitySalary ? 
+                'You would need to make at least $' + this.formatCurrency(equivAmount) + ' in this city.' :
+                'To maintain the same lifestyle...'
+              }
+                </p>
             </div>
         )
 
