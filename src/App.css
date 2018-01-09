@@ -6,6 +6,8 @@
   height: 80px;
 }
 
+
+
 .App-header {
   background-color: #222;
   padding: 20px;
@@ -87,6 +89,6 @@
 
 }
 
-.activeCity{
-  background: rgb(252, 248, 248);
+.explainer{
+  text-align: center;
 }

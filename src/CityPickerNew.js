@@ -19,24 +19,6 @@ export default class CityPickerNew extends Component {
         }
     }
 
-    shouldComponentUpdate = (np, ns) => {
-
-        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images') && this.state.hasOwnProperty('details')){
-            return false;
-        } else {
-            return true;
-        }
-
-
-    }
-
-
-    componentDidUpdate = () =>{
-        if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images') && this.state.hasOwnProperty('details')){
-            this.setState({updated: true});
-            this.props.setSelectedCities(this.state, this.props.id);
-        }
-    }
 
 
     //as the user enters their search, send a request for each letter and update
@@ -53,10 +35,11 @@ export default class CityPickerNew extends Component {
         if(this.state.userInput.length < 2){
             this.setState({suggestions:[{title: '', link: '', key: 0}]})
         } else {
-
+            
             fetch(url + 'cities/?search=' + this.state.userInput, {method: 'GET', mode: 'cors'})
                 .then( (response) => {return response.json()})
                     .then((res) => {
+
                         let suggestionList= this.formatCitySearch(res);
 
                         if(suggestionList && suggestionList.length > 1){
@@ -88,18 +71,34 @@ export default class CityPickerNew extends Component {
     loadAllData = (event, data) => {
 
         this.setState({city: data.result.title, link: data.result.link});
+
         fetch(data.result.link, {method: 'GET', mode: 'cors'}).then((response)=>{return response.json()})
-        .then((res) => {
-          this.setState({urbanAreaLink: res._links['city:urban_area'].href});
+            .then((res) => {
+                this.setState({urbanAreaLink: res._links['city:urban_area'].href});
+            })
+                .then(() => this.loadSalary())
+                    .then(() => this.loadUrbanDetails())
+                        .then(() => this.loadImage())
+                            
+        .catch((err) => {
+            this.setState({userInput: ''})
+            alert('No information on that city');
         })
-        .then(() => this.loadUrbanDetails())
-        .then(() => this.loadImage())
-        .then(() => this.loadSalary())
     }
 
     //this is one of the events that could happen. 
     handleCityChoice = (event, data) => {
-        this.loadAllData(event, data);
+
+        let promise = new Promise( (resolve, reject) => {
+
+            this.loadAllData(event, data);
+            
+            if(this.state.hasOwnProperty('city'))
+                resolve('nigger');
+        })
+
+        promise.then(state => console.log(this.state));
+        
     }
 
     //here we want to search the urban area data which is what were
@@ -112,10 +111,16 @@ export default class CityPickerNew extends Component {
 
                     fetch(res._links['ua:' + resource].href, {method:'GET', mode: 'cors'})
                         .then((response) => response.json())
-                            .then((res) => this.setState({[resource]: res}))
+                            .then((res) => this.setState({[resource]: res}, () => {
+                                if(this.state.hasOwnProperty('salaries') && this.state.hasOwnProperty('images') && this.state.hasOwnProperty('details'))
+                                    this.props.setSelectedCities(this.state, this.props.id)
+                            }))
+                                
+                            
                 })
-
+               
     }
+
 
     loadUrbanDetails = () => {
         this.loadUrbanData('details');
@@ -150,11 +155,11 @@ export default class CityPickerNew extends Component {
                 size = 'large'
                 showNoResults = {false}
                 onResultSelect = {this.handleCityChoice}
-                
+                onFocus = {this.onfocus}
                 />
 
                 {this.state.images && <Image src = {this.state.images.photos[0].image.mobile} size='medium' rounded/>}
-        
+   
               </div>
         
         

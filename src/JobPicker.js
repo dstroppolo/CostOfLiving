@@ -20,18 +20,36 @@ export default class JobPicker extends Component {
     //   },
     //  ...
     // ]
-    componentDidUpdate = () => {
 
+
+
+    componentDidMount = () => {
         if(this.props.info && this.state.jobList.length === 0){
             this.formatSalaryInfo();
             this.getCostOfLiving(this.props.info);
+            this.setState({ratio: this.props.ratio});
         }
-
     }
 
-    formatSalaryInfo = () => {
+    componentWillReceiveProps = (np) =>{
+        console.log(np);
 
-        let salaries = this.props.info.salaries.salaries;
+        if(!this.props.info && np.info){
+            this.formatSalaryInfo(np.info.salaries.salaries);
+            this.getCostOfLiving(np.info);
+
+        }
+
+        if(!this.props.ratio && np.ratio){
+            this.setState({ratio: np.ratio})
+        }
+    }
+
+
+
+    formatSalaryInfo = (newProps) => {
+
+        let salaries = newProps || this.props.info.salaries.salaries;
         let salaryList = [];
 
         salaries.forEach((salary) => {
@@ -94,10 +112,10 @@ export default class JobPicker extends Component {
 
     render(){
 
+        
         let equivAmount = this.props.mainCitySalary * this.props.ratio;
         let compareAmount = this.state.salary;
         let numberColor = 'black';
-
         if(this.props.id != 0 && this.props.mainCitySalary && this.state.salary){
             console.log(equivAmount);
             console.log(compareAmount);
@@ -108,11 +126,9 @@ export default class JobPicker extends Component {
             <div className = {this.props.active? 'jobPicker activeCity': 'jobPicker'}>
               <Dropdown upward onChange = {this.handleSelection} selection placeholder = 'Jobs...' options = {this.state.jobList} />
               <h1 style = { {color: numberColor} }>{this.state.salary ? '$' + this.formatCurrency(this.state.salary) : 'Select a career'}</h1>
-              <p>{this.props.id === 0 ? 
-                'This city is the baseline.' : 
-                this.props.mainCitySalary ? 
-                'You would need to make at least $' + this.formatCurrency(equivAmount) + ' in this city.' :
-                'To maintain the same lifestyle...'
+              <p>{this.props.id === 0 ? 'This city is the baseline.' : 
+              
+              this.state.ratio ?  'You would need to make at least $' + this.formatCurrency(equivAmount) + ' in this city.' : 'To maintain the same lifestyle...'
               }
                 </p>
             </div>

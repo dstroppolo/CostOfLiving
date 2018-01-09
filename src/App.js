@@ -6,6 +6,7 @@ import JobPicker from './JobPicker';
 import { Button } from 'semantic-ui-react';
 import 'semantic-ui-css/semantic.min.css';
 import  calculateCityRatios  from './calculations';
+import Explainer from './Explainer';
 
 
 class App extends Component {
@@ -36,8 +37,15 @@ class App extends Component {
         COLDataWithIndex: {...this.state.COLDataWithIndex, ...COL}
       }, () => {
           if(this.state.COLDataWithIndex.hasOwnProperty(0) && Object.keys(this.state.COLDataWithIndex).length > 1){
-            var x = calculateCityRatios([this.state.COLDataWithIndex[0], this.state.COLDataWithIndex[id]]);
-            this.setState({COLRatios: {...this.state.COLRatios, [id]: x}});
+
+            Object.keys(this.state.COLDataWithIndex).forEach((data, id) => {
+              var x = calculateCityRatios([this.state.COLDataWithIndex[0], this.state.COLDataWithIndex[id]]);
+              this.setState({COLRatios: {...this.state.COLRatios, [id]: x}});
+            })
+
+
+
+
           }
       })
     }
@@ -52,7 +60,6 @@ class App extends Component {
     )
   }
 
-
   setMainCitySalary = (salary, id) => {
     if(id === 0)
       this.setState({mainCitySalary: salary});
@@ -66,7 +73,7 @@ class App extends Component {
         if(jobs){
           return <JobPicker mainCitySalary = {this.state.mainCitySalary} setMainCitySalary = {this.setMainCitySalary} ratio = {this.state.COLRatios[key]} handleCOLData = {this.handleCOLData} active={key===0} info = {this.state.cities[key]} key = {key} id = {key} />
         } else {
-          return <CityPickerNew setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
+          return <CityPickerNew userInput = {this.state.cities[key] ? this.state.cities[key].userInput : ''} setSelectedCities = {this.setSelectedCities} key = {key} id={key}/>
         }
       }
    )
@@ -79,7 +86,7 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Cost of Living and Salary Calculator</h1>
         </header>
 
         <div className = 'mainBody'>
@@ -98,11 +105,13 @@ class App extends Component {
           </div>
 
           <div className = 'salaryInfoWrap'>
-            {this.addCityPickers(true)}
+            {Object.keys(this.state.cities).length > 0 && this.addCityPickers(true)}
           </div>
 
         </div>
-
+        <div className = 'explainer'>
+          <Explainer />
+          </div>
       </div>
     );
   }
