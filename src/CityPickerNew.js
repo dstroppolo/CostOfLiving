@@ -94,7 +94,7 @@ export default class CityPickerNew extends Component {
             this.loadAllData(event, data);
             
             if(this.state.hasOwnProperty('city'))
-                resolve('nigger');
+                resolve('didn't work');
         })
 
         promise.then(state => console.log(this.state));
